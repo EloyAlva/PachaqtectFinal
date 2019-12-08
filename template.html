@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="pedidos.css">
+    <link rel="stylesheet" href="cocina.css">
+    <title>Document</title>
+</head>
+<body>
+ <div id="container">
+        <header>
+                <div class="portada"> 
+                <ul>
+                    <li><img src="Img/Cocina/promo3.jpg" alt=""></li>
+                    <li><img src="Img/Cocina/promo4.png" alt=""></li>
+                    <li><img src="Img/Cocina/promo5.jpg" alt=""></li>
+                    <li><img src="Img/Cocina/promo6.png" alt=""></li>
+                       <li><img src="Img/Cocina/promo5.jpg" alt=""></li>
+                    <li><img src="Img/Cocina/promo6.png" alt=""></li>
+                    <li><img src="Img/Cocina/promo3.jpg" alt=""></li>
+                    <li><img src="Img/Cocina/promo4.png" alt=""></li>
+                 
+                </ul>
+                </div>
+            </header>
+    <div class="box-all">
+        <div class="box-items">
+            <div class="container-all">
+                <div>
+                    <h2>Elige tu tipo de pan</h2>
+                </div>
+                <div class="container-items">
+                    <div v-for="pan in panes" :key="pan.id" class="item">
+                        <p class="name-item">{{pan.name}}</p>
+                        <img src="https://www.bembos.com.pe/media/wysiwyg/menu/tacuchay-menu.webp" alt="">
+                        <p class="price-item">S/. {{pan.price}}</p>
+                        <button class="btnAdd" @click=agregar>AGREGAR</button>
+                    </div>
+                </div>
+            </div>
+            <div class="container-all">
+                <div>
+                    <h2>Elige tu tipo de Carne</h2>
+                </div>
+                <div class="container-items">
+                    <div v-for="carne in carnes" :key="carne.id" class="item">
+                        <p class="name-item">{{carne.name}}</p>
+                        <img src="https://www.bembos.com.pe/media/wysiwyg/menu/tacuchay-menu.webp" alt="">
+                        <p class="price-item">S/. {{carne.price}}</p>
+                        <button class="btnAdd" @click=agregar>AGREGAR</button>
+                    </div>
+                </div>
+            </div>
+            <div class="container-all">
+                <div>
+                    <h2>Elige tu tipo de queso</h2>
+                </div>
+                <div class="container-items">
+                    <div v-for="queso in quesos" :key="queso.id" class="item">
+                        <p class="name-item">{{queso.name}}</p>
+                        <img src="https://www.bembos.com.pe/media/wysiwyg/menu/tacuchay-menu.webp" alt="">
+                        <p class="price-item">S/. {{queso.price}}</p>
+                        <button class="btnAdd" @click=agregar>AGREGAR</button>
+                    </div>
+                </div>
+            </div>
+            <div class="container-all">
+                <div>
+                    <h2>Elige tu tipo de verdura</h2>
+                </div>
+                <div class="container-items">
+                    <div v-for="verdura in verduras" :key="verdura.id" class="item">
+                        <p class="name-item">{{verdura.name}}</p>
+                        <img src="https://www.bembos.com.pe/media/wysiwyg/menu/tacuchay-menu.webp" alt="">
+                        <p class="price-item">S/. {{verdura.price}}</p>
+                        <button class="btnAdd" @click=agregar>AGREGAR</button>
+                    </div>
+                </div>
+            </div>
+            <div class="container-all">
+                <div>
+                    <h2>Elige tu tipo de complementos</h2>
+                </div>
+                <div class="container-items">
+                    <div v-for="complemento in complementos" :key="complemento.id" class="item">
+                        <p class="name-item">{{complemento.name}}</p>
+                        <img src="https://www.bembos.com.pe/media/wysiwyg/menu/tacuchay-menu.webp" alt="">
+                        <p class="price-item">S/. {{complemento.price}}</p>
+                        <button class="btnAdd" @click=agregar>AGREGAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="order-now">
+            <h2>Resumen de Pedido</h2>
+            <div class="container-pedidos">
+                <div v-for="order in orders" :key="order.id" class="pedido-items">
+                    <div>
+                        <div>{{order.name}}</div>
+                        <div>{{order.precio}}</div>
+                        <button @click="killed">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+            <button class="btnAdd" @click="tomarPedido" >Enviar Pedido</button>
+
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+       debugger;
+
+       const app= new Vue({
+                el: '#container',
+                data:{
+                    products : [],
+                    panes : [],
+                    carnes : [],
+                    quesos : [],
+                    verduras : [],
+                    complementos : [],
+                    papas : [],
+                    bebidas : [],
+                    orders : [],
+                },
+            
+                methods: {
+                getApi(){
+                    axios.get('https://api.myjson.com/bins/1008dw')
+                        .then(res=>{
+                            this.obtenerDatos(res.data)
+                            
+                        })
+                },
+             
+                obtenerDatos(info){
+                    this.panes=(info[0].category01);
+                    this.carnes = info[0].category02;
+                    this.quesos = info[0].category03;
+                    this.verduras = info[0].category04;
+                    this.complementos = info[0].category05
+        
+                    
+        
+                },
+                agregar(e){
+                    e.preventDefault;
+                    class orderItems{
+                        constructor(name,precio){
+                            this.name = name,
+                            this.precio = precio
+                        }
+                    }
+                    
+                    let item= e.target.parentElement;
+                    let order = new orderItems(item.querySelector('.name-item').textContent,item.querySelector('.price-item').textContent)
+        
+                    this.orders.push(order);
+                    
+        
+                },
+                killed(e){
+                    e.target.parentElement.remove();
+                },
+                tomarPedido(e){
+                    let ordenCocina = e.target.parentElement.querySelector('.container-pedidos');
+                    alert("Pedido Enviado a Cocina")
+                }
+        
+            },
+            created(){
+                this.getApi()
+            }
+            });
+        
+        
+      
+        </script>
+    
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Bembos Enterprise</title> 
+	<meta usuario="viewport" content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=3.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="login.css">
+  <link rel="icon"  type="imclave/png" href="Img/Login/bembosicon.png">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+</head>  
+<body>
+   
+
+     
+
+<div id="app3">
+{{info}}
+
+</div>
+  
+    <form class="formulario" id="app" @submit="checkForm" action="/something" method="post">
+    
+  
+     <img src="Img/Login/bembos.png" class="Logo" alt="">
+     <div class="contenedor">
+     
+      <div class="input-contenedor">
+       <select id="TipoUsuario" class="datos">
+        <option value="1" selected>Pedidos</option> 
+        <option value="2">Cocina</option>
+      </select>
+        
+     </div>
+         
+
+         <div class="input-contenedor">
+         <input  class="datos" type="text" placeholder="Usuario" v-model="usuario" id="usuario">
+         
+         </div>
+         
+         <div class="input-contenedor">
+        <i class="fas fa-key icon"></i>
+         <input class="datos" type="password" placeholder="Clave" v-model="clave" id="clave">
+         
+         </div>
+         <div v-if="errors.length">   
+            <div class="alert alert-danger" v-for="error in errors">{{ error }}</div>
+         </div>
+         <input type="submit" value="Ingresar" class="button">
+         
+       </div>
+    </form>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+  const app = new Vue({
+  el:'#app',
+  data:{
+    info:null,
+    errors:[],
+    usuario:null,
+    clave:null,
+  },
+  methods:{
+    checkForm:function(e) {
+      var tipousuario= document.getElementById("TipoUsuario");
+      debugger;
+     
+      this.errors = [];
+      if (this.usuario!="admin") this.errors.push("Usuario Incorrecto.");
+      if (this.clave!="admin") this.errors.push("Clave Incorrecta.");
+        if (this.errors.length===0)  {
+        if(tipousuario.value==="1") {
+        window.location.href="template.html";
+        }
+         if(tipousuario.value==="2"){
+        window.location.href="cocina.html";
+        } 
+      }
+      e.preventDefault();
+    }
+    // GetApiServicio: function(e){
+    //   var tipousuario= document.getElementById("TipoUsuario");
+    //   debugger;
+    //   if(this.usuario && this.clave ) return true;
+    //   this.errors = [];
+    //   if(!this.usuario) this.errors.push("Campo de Usuario Vacio.");
+    //   if(!this.clave) this.errors.push("Campo de Clave vacio.");
+    //   if(tipousuario.value==="-1"){
+    //     this.errors.push("Seleccione un tipo de Usuario Valido")
+    //   }
+    //   if 
+    //   if(tipousuario.value==="1") {
+    //     window.location.href="holaa.html";
+    //   }
+    //   if(tipousuario.value==="2"){
+    //     window.location.href="cocina.html";
+    //   }
+    //   e.preventDefault();
+     
+    // }             
+  }
+})
+  </script>
+ 
+</body>
+</html>
