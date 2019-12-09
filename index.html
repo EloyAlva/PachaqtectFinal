@@ -64,8 +64,7 @@
   methods:{
     checkForm:function(e) {
       var tipousuario= document.getElementById("TipoUsuario");
-      debugger;
-     
+	    
       this.errors = [];
       if (this.usuario!="admin") this.errors.push("Usuario Incorrecto.");
       if (this.clave!="admin") this.errors.push("Clave Incorrecta.");
