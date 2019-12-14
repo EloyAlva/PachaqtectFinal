@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="pedidos.css">
     <link rel="stylesheet" href="cocina.css">
+    <link rel="icon"  type="imclave/png" href="Img/Login/bembosicon.png">
     <title>Document</title>
 </head>
 <body>
@@ -24,8 +25,9 @@
                  
                 </ul>
                 </div>
-            </header>
-    <div class="box-all">
+     </header>
+
+     <div class="box-all">
         <div class="box-items">
             <div class="container-all">
                 <div>
@@ -35,7 +37,7 @@
                     <div v-for="pan in panes" :key="pan.id" class="item">
                         <p class="name-item">{{pan.name}}</p>
                         <img src="https://www.bembos.com.pe/media/wysiwyg/menu/tacuchay-menu.webp" alt="">
-                        <p class="price-item">S/. {{pan.price}}</p>
+                        <p>S/. <span class="price-item">{{pan.price}}</span></p>
                         <button class="btnAdd" @click=agregar>AGREGAR</button>
                     </div>
                 </div>
@@ -48,7 +50,7 @@
                     <div v-for="carne in carnes" :key="carne.id" class="item">
                         <p class="name-item">{{carne.name}}</p>
                         <img src="https://www.bembos.com.pe/media/wysiwyg/menu/tacuchay-menu.webp" alt="">
-                        <p class="price-item">S/. {{carne.price}}</p>
+                        <p>S/. <span  class="price-item">{{carne.price}}</span></p>
                         <button class="btnAdd" @click=agregar>AGREGAR</button>
                     </div>
                 </div>
@@ -61,7 +63,7 @@
                     <div v-for="queso in quesos" :key="queso.id" class="item">
                         <p class="name-item">{{queso.name}}</p>
                         <img src="https://www.bembos.com.pe/media/wysiwyg/menu/tacuchay-menu.webp" alt="">
-                        <p class="price-item">S/. {{queso.price}}</p>
+                        <p>S/. <span class="price-item">{{queso.price}}</span></p>
                         <button class="btnAdd" @click=agregar>AGREGAR</button>
                     </div>
                 </div>
@@ -74,7 +76,7 @@
                     <div v-for="verdura in verduras" :key="verdura.id" class="item">
                         <p class="name-item">{{verdura.name}}</p>
                         <img src="https://www.bembos.com.pe/media/wysiwyg/menu/tacuchay-menu.webp" alt="">
-                        <p class="price-item">S/. {{verdura.price}}</p>
+                        <p>S/. <span class="price-item">{{verdura.price}}</span></p>
                         <button class="btnAdd" @click=agregar>AGREGAR</button>
                     </div>
                 </div>
@@ -87,7 +89,7 @@
                     <div v-for="complemento in complementos" :key="complemento.id" class="item">
                         <p class="name-item">{{complemento.name}}</p>
                         <img src="https://www.bembos.com.pe/media/wysiwyg/menu/tacuchay-menu.webp" alt="">
-                        <p class="price-item">S/. {{complemento.price}}</p>
+                        <p>S/. <span class="price-item">{{complemento.price}}</span></p>
                         <button class="btnAdd" @click=agregar>AGREGAR</button>
                     </div>
                 </div>
@@ -97,15 +99,18 @@
             <h2>Resumen de Pedido</h2>
             <div class="container-pedidos">
                 <div v-for="order in orders" :key="order.id" class="pedido-items">
-                    <div>
-                        <div>{{order.name}}</div>
-                        <div>{{order.precio}}</div>
-                        <button @click="killed">Eliminar</button>
+                    <div class="box-order">
+                        <div class="order-name">{{order.name}}</div>
+                        <div>S/. <span class="precio-kill">{{order.precio}}</span></div>
+                        <button class="btnAdd" @click="killed">Eliminar</button>
                     </div>
+                    
                 </div>
+                
             </div>
+            <p>Total = S/. {{total}}</p>
             <button class="btnAdd" @click="tomarPedido" >Enviar Pedido</button>
-
+            
         </div>
     </div>
     </div>
@@ -113,20 +118,23 @@
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
+       
 
-        
        const app= new Vue({
                 el: '#container',
                 data:{
                     products : [],
-                    panes : [],
-                    carnes : [],
-                    quesos : [],
-                    verduras : [],
-                    complementos : [],
-                    papas : [],
-                    bebidas : [],
-                    orders : [],
+            panes : [],
+            carnes : [],
+            quesos : [],
+            verduras : [],
+            complementos : [],
+            papas : [],
+            bebidas : [],
+            orders : [],
+            ordersPrice : [],
+            pedidos : [],
+            total : 0
                 },
             
                 methods: {
@@ -158,24 +166,49 @@
                     }
                     
                     let item= e.target.parentElement;
-                    let order = new orderItems(item.querySelector('.name-item').textContent,item.querySelector('.price-item').textContent)
-        
-                    this.orders.push(order);
-                    
+            let precioItem = parseFloat(item.querySelector('.price-item').textContent);
+            let order = new orderItems(item.querySelector('.name-item').textContent,precioItem)
+            this.pedidos.push(item.querySelector('.name-item').textContent)
+            this.orders.push(order);
+            this.ordersPrice.push(precioItem);
+            
+            console.log(this.pedidos);
+            this.total = this.ordersPrice.reduce((totalSuma,order)=>{
+                return totalSuma+order},0)
+            localStorage.setItem('ordenes',JSON.stringify(this.pedidos))
         
                 },
                 killed(e){
-                    e.target.parentElement.remove();
-                },
-                tomarPedido(e){
-                    let ordenCocina = e.target.parentElement.querySelector('.container-pedidos');
-                    alert("Pedido Enviado a Cocina")
-                }
+            let precioKill=parseFloat(e.target.parentElement.querySelector('.precio-kill').textContent);
+            let i=this.ordersPrice.indexOf(precioKill);
+            this.ordersPrice.splice(i,1);
+            this.total = this.ordersPrice.reduce((totalSuma,order)=>{
+                return totalSuma+order
+            },0);
+            
+            e.target.parentElement.remove();
+                
+        },
+        tomarPedido(e){
+            
+            [].forEach.call(e.target.parentElement.querySelectorAll('.pedido-items'),function(clase){
+                clase.parentNode.removeChild(clase);
+            });
+            this.total =0;
+            this.ordersPrice =[];
+            
+        },
         
-            },
-            created(){
-                this.getApi()
-            }
+    },
+    created(){
+        this.getApi();
+        let datosLS = JSON.parse(localStorage.getItem('ordenes'));
+        if(datosLS===null){
+            this.pedidos = [];
+        }else{
+            this.pedidos = datosLS;
+        }
+    }
             });
         
         
